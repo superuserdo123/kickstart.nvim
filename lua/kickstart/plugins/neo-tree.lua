@@ -1,25 +1,36 @@
--- Neo-tree is a Neovim plugin to browse the file system
--- https://github.com/nvim-neo-tree/neo-tree.nvim
-
 return {
-  'nvim-neo-tree/neo-tree.nvim',
-  version = '*',
-  dependencies = {
-    'nvim-lua/plenary.nvim',
-    'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
-    'MunifTanjim/nui.nvim',
-  },
-  lazy = false,
-  keys = {
-    { '\\', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
-  },
-  opts = {
-    filesystem = {
-      window = {
-        mappings = {
-          ['\\'] = 'close_window',
-        },
-      },
+  {
+    'nvim-neo-tree/neo-tree.nvim',
+    branch = 'v3.x',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'MunifTanjim/nui.nvim',
+      'nvim-tree/nvim-web-devicons',
     },
+    lazy = false, -- or true if you want lazy load
+    config = function()
+      require('neo-tree').setup {
+        filesystem = {
+          filtered_items = {
+            hide_dotfiles = false,
+            hide_gitignored = false,
+          },
+        },
+        window = {
+          mappings = {
+            ['<cr>'] = 'open',
+            ['s'] = 'open_vsplit',
+            ['S'] = 'open_split',
+            ['t'] = 'open_tabnew',
+            ['<bs>'] = 'navigate_up',
+            ['.'] = 'set_root',
+            ['/'] = 'fuzzy_finder',
+          },
+        },
+      }
+
+      -- optional toggle key
+      vim.api.nvim_set_keymap('n', '<leader>e', '<Cmd>Neotree toggle<CR>', { noremap = true, silent = true })
+    end,
   },
 }
